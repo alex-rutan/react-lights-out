@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import _ from "lodash"; // https://javascript.plainenglish.io/how-to-deep-copy-objects-and-arrays-in-javascript-7c911359b089
+
 import Cell from "./Cell";
 import "./Board.css";
 
@@ -35,7 +37,7 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
     let initialBoard = [];
     // TODO: create array-of-arrays of true/false values
     for (let i = 0; i < nrows; i++) {
-      initialBoard.push(Array.from({ length: ncols }, x => Math.random() > .5 ? true : false));
+      initialBoard.push(Array.from({ length: ncols }, x => Math.random() > chanceLightStartsOn ? true : false));
     }
     
     return initialBoard;
@@ -67,15 +69,32 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
       };
 
       // TODO: Make a (deep) copy of the oldBoard
+      const newBoard = _.cloneDeep(oldBoard);
 
       // TODO: in the copy, flip this cell and the cells around it
-
+      for (let i = y - 1; i <= y + 1; i++) {
+        for (let j = x - 1; j <= x + 1; j++) {      
+          flipCell(i, j, newBoard);
+        }
+      }
+   
+      checkWin();
+      
       // TODO: return the copy
+      return newBoard;
     });
   }
 
   // if the game is won, just show a winning msg & render nothing else
-
+  function checkWin() {
+   if (hasWon()) {
+    return (
+      <div>
+        <p>"Congratulations! You won."</p>
+      </div>
+    )
+   }
+   
   // TODO
 
   // make table board
