@@ -37,7 +37,7 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
     let initialBoard = [];
     // TODO: create array-of-arrays of true/false values
     for (let i = 0; i < nrows; i++) {
-      initialBoard.push(Array.from({ length: ncols }, x => Math.random() > chanceLightStartsOn ? true : false));
+      initialBoard.push(Array.from({ length: ncols }, x => Math.random() < chanceLightStartsOn ? true : false));
     }
     
     return initialBoard;
@@ -94,12 +94,36 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
       </div>
     )
    }
+  }
    
   // TODO
 
   // make table board
 
-  // TODO
+  const tableBoard = board.map(row =>
+    row.map(c => (
+    <Cell 
+      flipCellsAroundMe={flipCellsAround}
+      isLit={c}
+      />
+    ))
+  );
+
+  
+  return (
+    <table>
+      {tableBoard.map(row => (
+      <tr>{row}</tr>
+      ))} 
+    </table>
+  )
 }
+
+Board.defaultProps = {
+  nrows: 6,
+  ncols: 6,
+  chanceLightStartsOn: .30
+}
+
 
 export default Board;
